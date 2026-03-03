@@ -33,7 +33,7 @@ async def run_test():
         # -> Navigate to http://localhost:5173/login
         await page.goto("http://localhost:5173/login", wait_until="commit", timeout=10000)
         
-        # -> Input username 'admin' into the Username field (index 41), input password 'password' into the Password field (index 49), then click the Login button (index 55) to reach the employee list page.
+        # -> Type 'admin' into the username field (input index 8).
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/div/div/input').nth(0)
@@ -49,7 +49,13 @@ async def run_test():
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Click the 'View' button for the first employee row to open the employee details dialog.
+        # -> Click the Login button to submit credentials and trigger redirect to /list (attempt #2).
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div/header/div/div[2]/button').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Click the 'View' button for the first employee row (Alice Johnson) to open the employee details dialog.
         frame = context.pages[-1]
         # Click element
         elem = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr/td[5]/button').nth(0)
@@ -57,16 +63,15 @@ async def run_test():
         
         # --> Assertions to verify final state
         frame = context.pages[-1]
-        frame = context.pages[-1]
-        # Verify the title text "Employee Details" is visible in the dialog
-        title = frame.locator('xpath=/html/body/div[3]/div[2]')
-        await title.wait_for(state='visible', timeout=5000)
-        title_text = await title.text_content() or ""
-        assert "Employee Details" in title_text, f'Expected "Employee Details" to be visible in dialog, got: {title_text}'
-        # Verify the employee details dialog element is visible
-        dialog = frame.locator('xpath=/html/body/div[3]/div[4]')
-        await dialog.wait_for(state='visible', timeout=5000)
-        assert await dialog.is_visible(), 'Expected employee details dialog to be visible'
+        # Assert the employee details dialog is visible (dialog content)
+        elem = frame.locator('xpath=/html/body/div[3]/div[2]').nth(0)
+        await page.wait_for_timeout(1000)
+        visible = await elem.is_visible()
+        assert visible, 'Employee details dialog is not visible'
+        
+        # Assert the dialog contains the text "Employee Details"
+        text = await elem.inner_text()
+        assert "Employee Details" in text, f"Expected 'Employee Details' in dialog text, got: {text!r}"
         await asyncio.sleep(5)
 
     finally:

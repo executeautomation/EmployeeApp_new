@@ -33,7 +33,7 @@ async def run_test():
         # -> Navigate to http://localhost:5173/login
         await page.goto("http://localhost:5173/login", wait_until="commit", timeout=10000)
         
-        # -> Fill username and password, then click the Login button.
+        # -> Type username and password into the login form and click the Login button.
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/div/div/input').nth(0)
@@ -49,29 +49,48 @@ async def run_test():
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Click the 'Delete' button for the first employee row (Alice Johnson) to open the confirmation dialog.
+        # -> Click the Login button (index 4) to submit the credentials and wait for the page to redirect to /list so the Add Employee flow can be started.
         frame = context.pages[-1]
         # Click element
-        elem = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr/td[5]/button[3]').nth(0)
+        elem = frame.locator('xpath=/html/body/div/header/div/div[2]/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Click the 'Delete' button in the confirmation dialog to confirm deletion of Alice Johnson (modal 'Delete' button index 208).
+        # -> Click the '+ ADD EMPLOYEE' button to open the Add Employee form (use element index 126).
         frame = context.pages[-1]
         # Click element
-        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div[2]/button[2]').nth(0)
+        elem = frame.locator('xpath=/html/body/div/div/div/div/div/div[2]/button').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Fill the Name field with 'Test User E' (start the form submission sequence).
+        frame = context.pages[-1]
+        # Input text
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div/div/input').nth(0)
+        await page.wait_for_timeout(3000); await elem.fill('Test User E')
+        
+        frame = context.pages[-1]
+        # Input text
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div[2]/div/input').nth(0)
+        await page.wait_for_timeout(3000); await elem.fill('test.user+alias@example.com')
+        
+        frame = context.pages[-1]
+        # Input text
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div[3]/div/input').nth(0)
+        await page.wait_for_timeout(3000); await elem.fill('HR')
+        
+        # -> Click the 'Add Employee' submit button (index 247) to submit the form and verify the new employee appears in the list.
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
         # --> Assertions to verify final state
         frame = context.pages[-1]
         frame = context.pages[-1]
-        # Verify we are on the employee list page after login
         assert "/list" in frame.url
-        # Verify the Delete button for the first employee row exists
-        elem = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr/td[5]/button[3]').nth(0)
-        assert await elem.is_visible(), "Expected Delete button for the first employee to be visible"
-        # The test plan expects a confirmation dialog with text 'Confirm' and a 'Deleted' message after confirmation.
-        # Those elements are not present in the provided available elements list, so the confirmation dialog / deleted message appears to be missing.
-        raise Exception("Confirmation dialog with text 'Confirm' or 'Deleted' message not found on the page. The delete-confirmation feature appears to be missing; marking task done.")
+        
+        # The test plan requires verifying the visibility of the text "Test User E".
+        # No element xpath containing this text is present in the provided available elements list, so we cannot perform a locator-based visibility assertion.
+        raise AssertionError('Cannot assert visibility of "Test User E": no matching xpath found in available elements.')
         await asyncio.sleep(5)
 
     finally:

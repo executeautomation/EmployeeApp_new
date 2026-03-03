@@ -33,7 +33,7 @@ async def run_test():
         # -> Navigate to http://localhost:5173/login
         await page.goto("http://localhost:5173/login", wait_until="commit", timeout=10000)
         
-        # -> Fill the username input with 'admin' (index 41), then fill password and click Login.
+        # -> Fill username and password fields and click the Login button to sign in (input into index 7, input into index 8, click index 11).
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/div/div/input').nth(0)
@@ -49,7 +49,13 @@ async def run_test():
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Click the Search input (index 1078) and type 'a' to filter the employee list.
+        # -> Click the Login button to sign in and wait for the employee list page to load (this will navigate to /list).
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div/header/div/div[2]/button').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Click the Search input (index 129) and type 'a' to filter the employee list.
         frame = context.pages[-1]
         # Click element
         elem = frame.locator('xpath=/html/body/div/div/div/div/div/div[3]/div/div/input').nth(0)
@@ -63,9 +69,19 @@ async def run_test():
         # --> Assertions to verify final state
         frame = context.pages[-1]
         frame = context.pages[-1]
-        assert await frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/thead/tr/th[1]').is_visible()
-        # The provided available elements do not include any element containing the text "No results".
-        raise Exception("Feature missing: no element with text 'No results' found in the available elements; cannot assert its visibility. Marking task as done.")
+        elem = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/thead/tr/th[1]')
+        assert await elem.is_visible()
+        row1 = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr[1]/td[1]')
+        assert await row1.is_visible()
+        text1 = await row1.inner_text()
+        assert "No results" not in text1
+        row2 = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr[2]/td[1]')
+        assert await row2.is_visible()
+        text2 = await row2.inner_text()
+        assert "No results" not in text2
+        search = frame.locator('xpath=/html/body/div/div/div/div/div[1]/div[3]/div/div/input')
+        assert await search.is_visible()
+        assert await search.input_value() == 'a'
         await asyncio.sleep(5)
 
     finally:

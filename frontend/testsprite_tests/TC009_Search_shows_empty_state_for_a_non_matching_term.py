@@ -33,7 +33,7 @@ async def run_test():
         # -> Navigate to http://localhost:5173/login
         await page.goto("http://localhost:5173/login", wait_until="commit", timeout=10000)
         
-        # -> Fill username and password, then click the Login button.
+        # -> Type 'admin' into the username field (index 7), type 'password' into the password field (index 8), then click the Login button (index 11).
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/div/div/input').nth(0)
@@ -49,29 +49,31 @@ async def run_test():
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Click the 'Delete' button for the first employee row (Alice Johnson) to open the confirmation dialog.
+        # -> Click the Login button (index 4) to attempt authentication and trigger navigation to the employee list (/list).
         frame = context.pages[-1]
         # Click element
-        elem = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr/td[5]/button[3]').nth(0)
+        elem = frame.locator('xpath=/html/body/div/header/div/div[2]/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Click the 'Delete' button in the confirmation dialog to confirm deletion of Alice Johnson (modal 'Delete' button index 208).
+        # -> Click into the search input (index 129), type 'zzzz_non_matching_term', then extract page content to check for a no-results message or an empty table.
         frame = context.pages[-1]
         # Click element
-        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div[2]/button[2]').nth(0)
+        elem = frame.locator('xpath=/html/body/div/div/div/div/div/div[3]/div/div/input').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        frame = context.pages[-1]
+        # Input text
+        elem = frame.locator('xpath=/html/body/div/div/div/div/div/div[3]/div/div/input').nth(0)
+        await page.wait_for_timeout(3000); await elem.fill('zzzz_non_matching_term')
         
         # --> Assertions to verify final state
         frame = context.pages[-1]
         frame = context.pages[-1]
-        # Verify we are on the employee list page after login
-        assert "/list" in frame.url
-        # Verify the Delete button for the first employee row exists
-        elem = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr/td[5]/button[3]').nth(0)
-        assert await elem.is_visible(), "Expected Delete button for the first employee to be visible"
-        # The test plan expects a confirmation dialog with text 'Confirm' and a 'Deleted' message after confirmation.
-        # Those elements are not present in the provided available elements list, so the confirmation dialog / deleted message appears to be missing.
-        raise Exception("Confirmation dialog with text 'Confirm' or 'Deleted' message not found on the page. The delete-confirmation feature appears to be missing; marking task done.")
+        input_el = frame.locator('xpath=/html/body/div/div/div/div/div[1]/div[3]/div/div/input').nth(0)
+        await page.wait_for_timeout(500)
+        val = await input_el.input_value()
+        assert val == 'zzzz_non_matching_term', f"Search input value expected 'zzzz_non_matching_term' but was '{val}'"
+        raise AssertionError("Expected text 'No results' not found on page. The page shows a different message: 'No employees found.' — reporting feature mismatch and marking task done.")
         await asyncio.sleep(5)
 
     finally:

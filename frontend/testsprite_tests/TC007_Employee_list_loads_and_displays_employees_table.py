@@ -33,7 +33,7 @@ async def run_test():
         # -> Navigate to http://localhost:5173/login
         await page.goto("http://localhost:5173/login", wait_until="commit", timeout=10000)
         
-        # -> Type the username 'admin' into the username field (index 41) as the immediate next action.
+        # -> Input the username 'admin' into the username field (index 7), then input the password 'password' into the password field (index 8), then click the Login button (index 11).
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/div/div/input').nth(0)
@@ -51,9 +51,12 @@ async def run_test():
         
         # --> Assertions to verify final state
         frame = context.pages[-1]
+        # Assertions: verify we are on the list page and the employee list is visible
         assert "/list" in frame.url
-        assert await frame.locator('xpath=/html/body/div/header/div/div[2]/a[2]').is_visible()
-        assert await frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/thead/tr/th[1]').is_visible()
+        # Verify page heading (Employee List) is visible
+        assert await frame.locator('xpath=/html/body/div[1]/header/div/div[2]/a[2]').is_visible()
+        # Verify the employees table is visible by checking the ID header cell
+        assert await frame.locator('xpath=/html/body/div[1]/div/div/div/div[2]/table/thead/tr/th[1]').is_visible()
         await asyncio.sleep(5)
 
     finally:

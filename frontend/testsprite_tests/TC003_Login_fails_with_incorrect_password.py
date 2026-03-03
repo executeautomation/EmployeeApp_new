@@ -33,7 +33,7 @@ async def run_test():
         # -> Navigate to http://localhost:5173/login
         await page.goto("http://localhost:5173/login", wait_until="commit", timeout=10000)
         
-        # -> Type 'fake.user@example.com' into the username input and 'wrong-password-123' into the password input, then click the Login button (use inputs indexes 41 and 49, submit button index 55).
+        # -> ASSERTION: Verify text 'Login' is visible. Then type 'fake.user@example.com' into the username input (index 7), type 'wrong-password-123' into the password input (index 8), and click the Login button (index 11).
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/div/div/input').nth(0)
@@ -51,9 +51,16 @@ async def run_test():
         
         # --> Assertions to verify final state
         frame = context.pages[-1]
-        await expect(frame.locator('text=Login').first).to_be_visible(timeout=3000)
-        await expect(frame.locator('text=invalid credentials').first).to_be_visible(timeout=3000)
-        assert '/login' in frame.url
+        # ASSERTION: Verify text 'Login' is visible
+        elem = frame.locator('xpath=/html/body/div/header/div/div[2]/a')
+        assert await elem.is_visible(), "Expected text 'Login' to be visible using xpath /html/body/div/header/div/div[2]/a"
+        
+        # ASSERTION: Verify URL contains '/login' (ensure we did not navigate away)
+        assert "/login" in frame.url, f"Expected '/login' to be in URL but got: {frame.url}"
+        
+        # ASSERTION: Verify text 'invalid credentials' is visible - missing element
+        # The page shows an error text in the extracted content, but there is no corresponding xpath provided in the available elements list.
+        raise AssertionError("Cannot assert presence of 'invalid credentials' (or 'Invalid username or password') message: no matching xpath provided in available elements. Available xpaths: [/html/body/div/header/div/div[2]/a, /html/body/div/header/div/div[2]/button, /html/body/div/div/div/div/form/div[1]/div/input, /html/body/div/div/div/div/form/div[2]/div/input, /html/body/div/div/div/div/form/button]")
         await asyncio.sleep(5)
 
     finally:
