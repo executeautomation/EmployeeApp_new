@@ -33,7 +33,7 @@ async def run_test():
         # -> Navigate to http://localhost:5173/login
         await page.goto("http://localhost:5173/login", wait_until="commit", timeout=10000)
         
-        # -> Fill username and password, then click the Login button.
+        # -> Input username 'admin' into the Username field (index 7), input password 'password' into the Password field (index 8), then click Login (index 11).
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/div/div/input').nth(0)
@@ -49,29 +49,49 @@ async def run_test():
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Click the 'Delete' button for the first employee row (Alice Johnson) to open the confirmation dialog.
+        # -> Attempt to submit the login form again by clicking the Login button (index 4).
         frame = context.pages[-1]
         # Click element
-        elem = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr/td[5]/button[3]').nth(0)
+        elem = frame.locator('xpath=/html/body/div/header/div/div[2]/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Click the 'Delete' button in the confirmation dialog to confirm deletion of Alice Johnson (modal 'Delete' button index 208).
+        # -> Click the '+ Add Employee' button to open the Add Employee form (index 126).
         frame = context.pages[-1]
         # Click element
-        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div[2]/button[2]').nth(0)
+        elem = frame.locator('xpath=/html/body/div/div/div/div/div/div[2]/button').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Fill the Add Employee form: enter Name='Test User D', leave Email empty, enter Position='Analyst', then submit the form to trigger validation.
+        frame = context.pages[-1]
+        # Input text
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div/div/input').nth(0)
+        await page.wait_for_timeout(3000); await elem.fill('Test User D')
+        
+        frame = context.pages[-1]
+        # Input text
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div[2]/div/input').nth(0)
+        await page.wait_for_timeout(3000); await elem.fill('')
+        
+        frame = context.pages[-1]
+        # Input text
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div[3]/div/input').nth(0)
+        await page.wait_for_timeout(3000); await elem.fill('Analyst')
+        
+        # -> Click the Add Employee submit button (index 247) to submit the form and trigger validation, then verify that Name and Position fields retain their values.
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
         # --> Assertions to verify final state
         frame = context.pages[-1]
         frame = context.pages[-1]
-        # Verify we are on the employee list page after login
-        assert "/list" in frame.url
-        # Verify the Delete button for the first employee row exists
-        elem = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr/td[5]/button[3]').nth(0)
-        assert await elem.is_visible(), "Expected Delete button for the first employee to be visible"
-        # The test plan expects a confirmation dialog with text 'Confirm' and a 'Deleted' message after confirmation.
-        # Those elements are not present in the provided available elements list, so the confirmation dialog / deleted message appears to be missing.
-        raise Exception("Confirmation dialog with text 'Confirm' or 'Deleted' message not found on the page. The delete-confirmation feature appears to be missing; marking task done.")
+        name_elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div[1]/div/input').nth(0)
+        assert await name_elem.input_value() == 'Test User D'
+        position_elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div[3]/div/input').nth(0)
+        assert await position_elem.input_value() == 'Analyst'
+        email_elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div[2]/div/input').nth(0)
+        assert await email_elem.input_value() == ''
         await asyncio.sleep(5)
 
     finally:

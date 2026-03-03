@@ -9,10 +9,12 @@
     "projectName": "frontend",
     "projectPath": "/home/runner/work/EmployeeApp_new/EmployeeApp_new/frontend",
     "testIds": [],
-    "additionalInstruction": "The app requires login before accessing protected pages. Use username 'admin' and password 'password' for login. The backend API runs on http://localhost:4000. The frontend runs on http://localhost:5173. After login, the user is redirected to /list which shows the employee list.",
+    "additionalInstruction": "The app requires login before accessing protected pages. Use username 'admin' and password 'password' for login. The backend API runs on http://localhost:4000. The frontend runs on http://localhost:5173. After login, the user is redirected to /list which shows the employee list. The database already contains employees (Alice Johnson and Bob Smith), so the employee list will not be empty.",
     "serverMode": "production",
-    "envs": {}
+    "envs": {
+      "API_KEY": "sk-user-G4Da2KVOTpwGXdiX9Komh5D_c9nx-7_f9VTX3WGMh6yzi3wG7qFEG3zezutxuzqqQv6zfnplmH5SELlYYO7bIuMCQqCsvVdB32oMBkJMPZaSwJs-g9DVHMpyQecB6S3AsUA"
+    }
   },
-  "serverPort": 38117,
-  "proxy": "http://fbe913cd-c414-45f1-9956-2db7ccb5e86f:vlogzBrA68T0kTO3zE0mtpVhjtUbMN2l@tun.testsprite.com:8080"
+  "serverPort": 41793,
+  "proxy": "http://3abdaa36-2765-46a1-aebd-cc2ef2460769:BASDHNtWIWDOz0qeYRTGjXsZnsFXUiVf@tun.testsprite.com:8080"
 }

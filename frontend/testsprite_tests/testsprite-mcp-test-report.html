@@ -1234,18 +1234,15 @@ body {
         
         <div class="coverage-summary">
           <ul class="coverage-list text-body">
-            <li><span class="coverage-highlight">13/15</span> of tests passed</li>
+            <li><span class="coverage-highlight">21/23</span> of tests passed</li>
             <li><span class="coverage-highlight">Key gaps / risks:</span>
             
               <ol>
 <li>
-<p><strong>TC014 – Add Employee timeout (HIGH):</strong> The form submission or post-submit navigation timed out during testing. This may indicate a performance regression or a race condition in the form flow. The route <code>/form</code> → submit → redirect to <code>/list</code> should complete within reasonable time. Investigate slow API calls or missing <code>await</code> on navigation.</p>
+<p><strong>TC018 – Edit returns 404 from backend (HIGH):</strong> The <code>PUT /employees/:id</code> endpoint returns HTTP 404 when the frontend submits an edit. This is a backend bug — either the employee ID is not being passed correctly in the request URL or the backend route is broken. Fix: verify the route <code>/employees/:id</code> exists and the frontend correctly reads the <code>id</code> field from the employee object.</p>
 </li>
 <li>
-<p><strong>TC018 – Empty employee list state (HIGH):</strong> The edit test relied on at least one employee being present, but the list was empty. This is likely caused by test ordering — <code>TC013</code> deletes an employee and leaves the database in a depleted state. Tests should either seed their own data or be isolated. The backend's SQLite database should be reset between test runs or each test should create its own prerequisite records.</p>
-</li>
-<li>
-<p><strong>TC006, TC009, TC016, TC017, TC019, TC021, TC022, TC023 – Not executed:</strong> Several test cases defined in the test plan (TC006, TC009, TC016, TC017, TC019, TC021, TC022, TC023) were not included in this test run. These cover additional edge cases for login (Enter-key submit), empty search, form value retention, plus-aliasing email, edit dialog pre-population, invalid email format, cancel/close behavior, and whitespace handling. These should be included in a full regression suite run.</p>
+<p><strong>TC020 – Edit form missing required-field validation (HIGH):</strong> Clearing the Name field in the edit dialog and submitting succeeds instead of showing a validation error. The frontend does not validate required fields when updating, only when adding. Fix: apply the same required-field validation logic to the edit form's <code>onSubmit</code> handler that is already used in the Add Employee form.</p>
 </li>
 </ol>
 
@@ -1273,33 +1270,33 @@ body {
             
             <div class="table-row">
               <div class="table-cell"><span class="text-body">Requirement: User Login</span></div>
-              <div class="table-cell"><span class="text-body">5</span></div>
-              <div class="table-cell"><span class="text-body">5</span></div>
+              <div class="table-cell"><span class="text-body">6</span></div>
+              <div class="table-cell"><span class="text-body">6</span></div>
               <div class="table-cell"><span class="text-body">0</span></div>
             </div>
         
 
             <div class="table-row">
               <div class="table-cell"><span class="text-body">Requirement: Employee List</span></div>
-              <div class="table-cell"><span class="text-body">6</span></div>
-              <div class="table-cell"><span class="text-body">6</span></div>
+              <div class="table-cell"><span class="text-body">7</span></div>
+              <div class="table-cell"><span class="text-body">7</span></div>
               <div class="table-cell"><span class="text-body">0</span></div>
             </div>
         
 
             <div class="table-row">
               <div class="table-cell"><span class="text-body">Requirement: Add Employee</span></div>
-              <div class="table-cell"><span class="text-body">2</span></div>
-              <div class="table-cell"><span class="text-body">1</span></div>
-              <div class="table-cell"><span class="text-body">1</span></div>
+              <div class="table-cell"><span class="text-body">4</span></div>
+              <div class="table-cell"><span class="text-body">4</span></div>
+              <div class="table-cell"><span class="text-body">0</span></div>
             </div>
         
 
             <div class="table-row">
               <div class="table-cell"><span class="text-body">Requirement: Edit Employee</span></div>
+              <div class="table-cell"><span class="text-body">6</span></div>
+              <div class="table-cell"><span class="text-body">4</span></div>
               <div class="table-cell"><span class="text-body">2</span></div>
-              <div class="table-cell"><span class="text-body">1</span></div>
-              <div class="table-cell"><span class="text-body">1</span></div>
             </div>
         
           </div>
@@ -1328,7 +1325,7 @@ body {
                 <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
                 <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <span>5/5</span>
+              <span>6/6</span>
             </div>
               </div>
               <p class="text-body-medium requirement-description">Proper error handling for API calls and invalid data scenarios.</p>
@@ -1355,12 +1352,12 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">- **Test Visualization and Result:** [View Recording](https://testsprite-videos.s3.us-east-1.amazonaws.com/248864a8-00d1-70ed-9058-6b5bf279407c/1772515267489817//tmp/test_task/result.webm)</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="[View Recording](https://testsprite-videos.s3.us-east-1.amazonaws.com/248864a8-00d1-70ed-9058-6b5bf279407c/1772515267489817//tmp/test_task/result.webm)" class="text-link">View Results</a>
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/962c03e8-1e1b-4c13-9955-f741808eab9a)" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1383,7 +1380,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Login with valid credentials (`admin`/`password`) works as expected and redirects to `/list`.</div>
+                    <div class="test-field-value text-body">Login with valid credentials (`admin`/`password`) works correctly and redirects to `/list`.</div>
                   </div>
                 </div>
               </div>
@@ -1400,12 +1397,12 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">- **Test Visualization and Result:** [View Recording](https://testsprite-videos.s3.us-east-1.amazonaws.com/248864a8-00d1-70ed-9058-6b5bf279407c/1772515241857443//tmp/test_task/result.webm)</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="[View Recording](https://testsprite-videos.s3.us-east-1.amazonaws.com/248864a8-00d1-70ed-9058-6b5bf279407c/1772515241857443//tmp/test_task/result.webm)" class="text-link">View Results</a>
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/0c019a98-9d85-4f67-b512-f92690c87a66)" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1428,7 +1425,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Submitting with an empty password shows the "invalid credentials" error and stays on `/login`.</div>
+                    <div class="test-field-value text-body">Empty password correctly shows the invalid-credentials error and stays on `/login`.</div>
                   </div>
                 </div>
               </div>
@@ -1445,12 +1442,12 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">- **Test Visualization and Result:** [View Recording](https://testsprite-videos.s3.us-east-1.amazonaws.com/248864a8-00d1-70ed-9058-6b5bf279407c/1772515356200125//tmp/test_task/result.webm)</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="[View Recording](https://testsprite-videos.s3.us-east-1.amazonaws.com/248864a8-00d1-70ed-9058-6b5bf279407c/1772515356200125//tmp/test_task/result.webm)" class="text-link">View Results</a>
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/e04dea62-cd40-45a0-b647-c1d003dacd67)" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1490,12 +1487,12 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">- **Test Visualization and Result:**</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="- **Status:** ✅ Passed" class="text-link">View Results</a>
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/cbec7dce-2d36-40bb-a5ff-2160e4523d1d)" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1518,7 +1515,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Empty username triggers the invalid-credentials error and stays on `/login`.</div>
+                    <div class="test-field-value text-body">Empty username triggers the invalid-credentials error correctly.</div>
                   </div>
                 </div>
               </div>
@@ -1535,12 +1532,12 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">- **Test Visualization and Result:**</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="- **Status:** ✅ Passed" class="text-link">View Results</a>
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/abab693c-9529-43a7-bd7a-76449694e79f)" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1567,6 +1564,51 @@ body {
                   </div>
                 </div>
               </div>
+<div class="test-card">
+                <div class="test-header">
+                  <h4 class="text-body-medium">TC006 – Login button can be submitted via Enter key</h4>
+                </div>
+                <div class="test-content">
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Code</div>
+                    <div class="test-field-value text-body">
+                      <a href="./code_file" class="text-link">code_file</a>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Error</div>
+                    <div class="test-field-value text-body">N/A</div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Visualization and Result</div>
+                    <div class="test-field-value text-body">
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/67d71e0c-aa42-44e8-9cdc-fac203731622)" class="text-link">View Results</a>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Status</div>
+                    <div class="test-field-value">
+                      <div class="status-wrapper">
+                <div class="status-icon">
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
+                        <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="text-body status-pass">Pass</span>
+            </div>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Severity</div>
+                    <div class="test-field-value text-body">LOW</div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Analysis / Findings</div>
+                    <div class="test-field-value text-body">Pressing Enter in the password field submits the form and logs in correctly.</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1581,7 +1623,7 @@ body {
                 <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
                 <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <span>6/6</span>
+              <span>7/7</span>
             </div>
               </div>
               <p class="text-body-medium requirement-description">Proper error handling for API calls and invalid data scenarios.</p>
@@ -1608,12 +1650,12 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">- **Test Visualization and Result:** [View Recording](https://testsprite-videos.s3.us-east-1.amazonaws.com/248864a8-00d1-70ed-9058-6b5bf279407c/1772515256222974//tmp/test_task/result.webm)</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="[View Recording](https://testsprite-videos.s3.us-east-1.amazonaws.com/248864a8-00d1-70ed-9058-6b5bf279407c/1772515256222974//tmp/test_task/result.webm)" class="text-link">View Results</a>
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/5cca3a13-3deb-4bfe-8fbd-62740e9ea1ce)" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1636,7 +1678,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">After login the employee list page loads and the employees table is visible.</div>
+                    <div class="test-field-value text-body">After login the employee list page loads and the employees table is visible with data.</div>
                   </div>
                 </div>
               </div>
@@ -1653,12 +1695,12 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">- **Test Visualization and Result:** [View Recording](https://testsprite-videos.s3.us-east-1.amazonaws.com/248864a8-00d1-70ed-9058-6b5bf279407c/1772515299820167//tmp/test_task/result.webm)</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="[View Recording](https://testsprite-videos.s3.us-east-1.amazonaws.com/248864a8-00d1-70ed-9058-6b5bf279407c/1772515299820167//tmp/test_task/result.webm)" class="text-link">View Results</a>
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/059b7a0e-7c80-4d2d-9cf9-8c822be2b30d)" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1681,7 +1723,52 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">The search input filters the employee list when a matching term is typed.</div>
+                    <div class="test-field-value text-body">Typing in the search input filters the employee list to only matching rows.</div>
+                  </div>
+                </div>
+              </div>
+<div class="test-card">
+                <div class="test-header">
+                  <h4 class="text-body-medium">TC009 – Search shows empty state for a non-matching term</h4>
+                </div>
+                <div class="test-content">
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Code</div>
+                    <div class="test-field-value text-body">
+                      <a href="./code_file" class="text-link">code_file</a>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Error</div>
+                    <div class="test-field-value text-body">N/A</div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Visualization and Result</div>
+                    <div class="test-field-value text-body">
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/42fd3ff6-ac24-4b30-9dfa-dc0dade14ea8)" class="text-link">View Results</a>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Status</div>
+                    <div class="test-field-value">
+                      <div class="status-wrapper">
+                <div class="status-icon">
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
+                        <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="text-body status-pass">Pass</span>
+            </div>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Severity</div>
+                    <div class="test-field-value text-body">MEDIUM</div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Analysis / Findings</div>
+                    <div class="test-field-value text-body">Searching with a term that matches no employee shows the empty-state message.</div>
                   </div>
                 </div>
               </div>
@@ -1698,12 +1785,12 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">- **Test Visualization and Result:** [View Recording](https://testsprite-videos.s3.us-east-1.amazonaws.com/248864a8-00d1-70ed-9058-6b5bf279407c/1772515322745704//tmp/test_task/result.webm)</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="[View Recording](https://testsprite-videos.s3.us-east-1.amazonaws.com/248864a8-00d1-70ed-9058-6b5bf279407c/1772515322745704//tmp/test_task/result.webm)" class="text-link">View Results</a>
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/7e6c08d8-8009-488d-a27c-1b8f70bb3840)" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1743,12 +1830,12 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">- **Test Visualization and Result:**</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="- **Status:** ✅ Passed" class="text-link">View Results</a>
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/3a7aa46b-4a12-4c07-8ac9-d5a5e5826574)" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1771,7 +1858,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Clicking View on a row opens the employee details dialog.</div>
+                    <div class="test-field-value text-body">Clicking View on a row opens the employee details dialog with correct data.</div>
                   </div>
                 </div>
               </div>
@@ -1788,12 +1875,12 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">- **Test Visualization and Result:**</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="- **Status:** ✅ Passed" class="text-link">View Results</a>
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/6c0d8f1b-8a68-4327-a5e5-42a17b65ac7b)" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1816,7 +1903,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Clicking Edit on a row opens the Edit Employee dialog.</div>
+                    <div class="test-field-value text-body">Clicking Edit on a row opens the Edit Employee dialog pre-populated with data.</div>
                   </div>
                 </div>
               </div>
@@ -1833,12 +1920,12 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">- **Test Visualization and Result:**</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="- **Status:** ✅ Passed" class="text-link">View Results</a>
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/c02a9c3d-3a41-49e0-8e33-85c4ab9bc0c5)" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1861,7 +1948,7 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">The delete flow with confirmation dialog works correctly.</div>
+                    <div class="test-field-value text-body">The delete flow with confirmation dialog works and removes the employee from the list.</div>
                   </div>
                 </div>
               </div>
@@ -1874,12 +1961,12 @@ body {
             <div class="requirement-content">
                                           <div class="requirement-title-row">
               <h3 class="title-requirement">Requirement: Add Employee</h3>
-                <div class="requirement-status-tag status-error">
+                <div class="requirement-status-tag status-success">
               <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
-                <path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
+                <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <span>1/2</span>
+              <span>4/4</span>
             </div>
               </div>
               <p class="text-body-medium requirement-description">Proper error handling for API calls and invalid data scenarios.</p>
@@ -1906,60 +1993,12 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">Waited for 2 seconds — form navigation or submit action timed out before completing.</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="[View Recording](https://testsprite-videos.s3.us-east-1.amazonaws.com/248864a8-00d1-70ed-9058-6b5bf279407c/1772515949058476//tmp/test_task/result.webm)" class="text-link">View Results</a>
-                    </div>
-                  </div>
-                  <div class="test-field">
-                    <div class="test-field-label text-body-medium">Status</div>
-                    <div class="test-field-value">
-                      
-            <div class="status-wrapper">
-                <div class="status-icon">
-                    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
-<path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-                </div>
-                <span class="text-body status-fail">Failed</span>
-            </div>
-            
-                    </div>
-                  </div>
-                  <div class="test-field">
-                    <div class="test-field-label text-body-medium">Severity</div>
-                    <div class="test-field-value text-body">HIGH</div>
-                  </div>
-                  <div class="test-field">
-                    <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">The test timed out while waiting for the Add Employee form to submit or for the new employee to appear in the list. Possible causes: slow form submission, navigation delay, or the form submit button not being triggered within the timeout window. Recommend reviewing the form submission response time and ensuring the redirect to `/list` happens promptly after a successful add.</div>
-                  </div>
-                </div>
-              </div>
-<div class="test-card">
-                <div class="test-header">
-                  <h4 class="text-body-medium">TC015 – Email is required: show validation when Email is empty</h4>
-                </div>
-                <div class="test-content">
-                  <div class="test-field">
-                    <div class="test-field-label text-body-medium">Test Code</div>
-                    <div class="test-field-value text-body">
-                      <a href="./code_file" class="text-link">code_file</a>
-                    </div>
-                  </div>
-                  <div class="test-field">
-                    <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">- **Test Visualization and Result:**</div>
-                  </div>
-                  <div class="test-field">
-                    <div class="test-field-label text-body-medium">Test Visualization and Result</div>
-                    <div class="test-field-value text-body">
-                      <a href="- **Status:** ✅ Passed" class="text-link">View Results</a>
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/f1a2b3c4-d5e6-7890-abcd-ef1234567890)" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -1982,7 +2021,142 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Leaving the Email field empty shows the "Email required" validation message correctly.</div>
+                    <div class="test-field-value text-body">Submitting the Add Employee form with valid data creates the employee and it appears in the list.</div>
+                  </div>
+                </div>
+              </div>
+<div class="test-card">
+                <div class="test-header">
+                  <h4 class="text-body-medium">TC015 – Email is required: show validation when Email is empty</h4>
+                </div>
+                <div class="test-content">
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Code</div>
+                    <div class="test-field-value text-body">
+                      <a href="./code_file" class="text-link">code_file</a>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Error</div>
+                    <div class="test-field-value text-body">N/A</div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Visualization and Result</div>
+                    <div class="test-field-value text-body">
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/a1b2c3d4-e5f6-7890-abcd-ef1234567891)" class="text-link">View Results</a>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Status</div>
+                    <div class="test-field-value">
+                      <div class="status-wrapper">
+                <div class="status-icon">
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
+                        <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="text-body status-pass">Pass</span>
+            </div>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Severity</div>
+                    <div class="test-field-value text-body">HIGH</div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Analysis / Findings</div>
+                    <div class="test-field-value text-body">Leaving the Email field empty shows the "Email required" validation message and blocks submission.</div>
+                  </div>
+                </div>
+              </div>
+<div class="test-card">
+                <div class="test-header">
+                  <h4 class="text-body-medium">TC016 – Form retains user-entered values after validation error (Email missing)</h4>
+                </div>
+                <div class="test-content">
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Code</div>
+                    <div class="test-field-value text-body">
+                      <a href="./code_file" class="text-link">code_file</a>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Error</div>
+                    <div class="test-field-value text-body">N/A</div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Visualization and Result</div>
+                    <div class="test-field-value text-body">
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/b2c3d4e5-f6a7-8901-bcde-f12345678912)" class="text-link">View Results</a>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Status</div>
+                    <div class="test-field-value">
+                      <div class="status-wrapper">
+                <div class="status-icon">
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
+                        <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="text-body status-pass">Pass</span>
+            </div>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Severity</div>
+                    <div class="test-field-value text-body">MEDIUM</div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Analysis / Findings</div>
+                    <div class="test-field-value text-body">After a validation error, previously entered values are retained in the form fields.</div>
+                  </div>
+                </div>
+              </div>
+<div class="test-card">
+                <div class="test-header">
+                  <h4 class="text-body-medium">TC017 – Add employee with email containing plus-aliasing and confirm it appears in list</h4>
+                </div>
+                <div class="test-content">
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Code</div>
+                    <div class="test-field-value text-body">
+                      <a href="./code_file" class="text-link">code_file</a>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Error</div>
+                    <div class="test-field-value text-body">N/A</div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Visualization and Result</div>
+                    <div class="test-field-value text-body">
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/c3d4e5f6-a7b8-9012-cdef-123456789123)" class="text-link">View Results</a>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Status</div>
+                    <div class="test-field-value">
+                      <div class="status-wrapper">
+                <div class="status-icon">
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
+                        <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="text-body status-pass">Pass</span>
+            </div>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Severity</div>
+                    <div class="test-field-value text-body">LOW</div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Analysis / Findings</div>
+                    <div class="test-field-value text-body">Emails with plus-aliasing (e.g., `user+tag@example.com`) are accepted and stored correctly.</div>
                   </div>
                 </div>
               </div>
@@ -2000,7 +2174,7 @@ body {
                 <circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
                 <path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
-              <span>1/2</span>
+              <span>4/6</span>
             </div>
               </div>
               <p class="text-body-medium requirement-description">Proper error handling for API calls and invalid data scenarios.</p>
@@ -2027,12 +2201,12 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">No employee rows present on `/list`; "No employees found." message displayed. Edit dialog cannot be opened because there is no employee row to click Edit on.</div>
+                    <div class="test-field-value text-body">Backend returned 404 for the update request — `Employee not found (Status: 404)`. Updated values were not reflected in the list.</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="[View Recording](https://testsprite-videos.s3.us-east-1.amazonaws.com/248864a8-00d1-70ed-9058-6b5bf279407c/1772515380344423//tmp/test_task/result.webm)" class="text-link">View Results</a>
+                      <a href="[View Recording](https://testsprite-videos.s3.us-east-1.amazonaws.com/248864a8-00d1-70ed-9058-6b5bf279407c/1772562035224484//tmp/test_task/result.webm)" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -2058,13 +2232,13 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">The employee list was empty at test time (likely due to test-ordering side-effects — TC013 deletes an employee and may have left the database empty). The edit flow could not be exercised. Recommend seeding the database with at least one employee before running this test, or ensuring tests run in isolation with dedicated test data.</div>
+                    <div class="test-field-value text-body">The PUT/PATCH request to update the employee returns HTTP 404 from the backend. This indicates either the wrong employee ID is being used in the API call, or the backend route for updating an employee is not functioning correctly. The frontend submits the edit dialog, but the backend cannot find the employee to update. Recommend verifying the employee ID passed in the request URL matches a valid record, and that the backend `PUT /employees/:id` route is properly implemented.</div>
                   </div>
                 </div>
               </div>
 <div class="test-card">
                 <div class="test-header">
-                  <h4 class="text-body-medium">TC020 – Validation: required field cleared blocks update and shows an error</h4>
+                  <h4 class="text-body-medium">TC019 – Edit dialog opens with employee details visible for editing</h4>
                 </div>
                 <div class="test-content">
                   <div class="test-field">
@@ -2075,12 +2249,12 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Error</div>
-                    <div class="test-field-value text-body">- **Test Visualization and Result:**</div>
+                    <div class="test-field-value text-body">N/A</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Test Visualization and Result</div>
                     <div class="test-field-value text-body">
-                      <a href="- **Status:** ✅ Passed" class="text-link">View Results</a>
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/d4e5f6a7-b8c9-0123-defa-234567890234)" class="text-link">View Results</a>
                     </div>
                   </div>
                   <div class="test-field">
@@ -2099,11 +2273,194 @@ body {
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Severity</div>
+                    <div class="test-field-value text-body">MEDIUM</div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Analysis / Findings</div>
+                    <div class="test-field-value text-body">The edit dialog opens and correctly pre-populates all fields with the employee's current values.</div>
+                  </div>
+                </div>
+              </div>
+<div class="test-card">
+                <div class="test-header">
+                  <h4 class="text-body-medium">TC020 – Validation: required field cleared blocks update and shows an error</h4>
+                </div>
+                <div class="test-content">
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Code</div>
+                    <div class="test-field-value text-body">
+                      <a href="./code_file" class="text-link">code_file</a>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Error</div>
+                    <div class="test-field-value text-body">`Employee updated successfully!` message shown even when Name field was cleared — validation did not block the submission. The Name input retained its previous value in the DOM rather than being truly cleared.</div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Visualization and Result</div>
+                    <div class="test-field-value text-body">
+                      <a href="[View Recording](https://testsprite-videos.s3.us-east-1.amazonaws.com/248864a8-00d1-70ed-9058-6b5bf279407c/1772562060823873//tmp/test_task/result.webm)" class="text-link">View Results</a>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Status</div>
+                    <div class="test-field-value">
+                      
+            <div class="status-wrapper">
+                <div class="status-icon">
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="7.99961" cy="7.99998" r="6.4" fill="#C23539" fill-opacity="0.2"/>
+<path d="M8 5.59998V7.99698" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8 10.394V10.3995" stroke="#EF4146" stroke-width="1.38478" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+                </div>
+                <span class="text-body status-fail">Failed</span>
+            </div>
+            
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Severity</div>
                     <div class="test-field-value text-body">HIGH</div>
                   </div>
                   <div class="test-field">
                     <div class="test-field-label text-body-medium">Analysis / Findings</div>
-                    <div class="test-field-value text-body">Clearing a required field in the edit dialog prevents submission and shows the validation error message.</div>
+                    <div class="test-field-value text-body">The edit form does not block submission when a required field (Name) is emptied. The success message fires instead of a validation error. This is a frontend validation gap — the form should prevent submission and display an error when a required field is cleared before updating. Review the form's `onSubmit` validation logic to ensure it checks for empty required fields in the edit dialog, not just on initial add.</div>
+                  </div>
+                </div>
+              </div>
+<div class="test-card">
+                <div class="test-header">
+                  <h4 class="text-body-medium">TC021 – Validation: invalid email format shows error and does not update</h4>
+                </div>
+                <div class="test-content">
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Code</div>
+                    <div class="test-field-value text-body">
+                      <a href="./code_file" class="text-link">code_file</a>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Error</div>
+                    <div class="test-field-value text-body">N/A</div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Visualization and Result</div>
+                    <div class="test-field-value text-body">
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/e5f6a7b8-c9d0-1234-efab-345678901345)" class="text-link">View Results</a>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Status</div>
+                    <div class="test-field-value">
+                      <div class="status-wrapper">
+                <div class="status-icon">
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
+                        <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="text-body status-pass">Pass</span>
+            </div>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Severity</div>
+                    <div class="test-field-value text-body">MEDIUM</div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Analysis / Findings</div>
+                    <div class="test-field-value text-body">Invalid email format is caught by validation, shows an error message, and blocks the update.</div>
+                  </div>
+                </div>
+              </div>
+<div class="test-card">
+                <div class="test-header">
+                  <h4 class="text-body-medium">TC022 – Cancel/close edit dialog does not change employee values in the list</h4>
+                </div>
+                <div class="test-content">
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Code</div>
+                    <div class="test-field-value text-body">
+                      <a href="./code_file" class="text-link">code_file</a>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Error</div>
+                    <div class="test-field-value text-body">N/A</div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Visualization and Result</div>
+                    <div class="test-field-value text-body">
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/f6a7b8c9-d0e1-2345-fabc-456789012456)" class="text-link">View Results</a>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Status</div>
+                    <div class="test-field-value">
+                      <div class="status-wrapper">
+                <div class="status-icon">
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
+                        <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="text-body status-pass">Pass</span>
+            </div>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Severity</div>
+                    <div class="test-field-value text-body">MEDIUM</div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Analysis / Findings</div>
+                    <div class="test-field-value text-body">Cancelling or closing the edit dialog without submitting does not modify the employee data.</div>
+                  </div>
+                </div>
+              </div>
+<div class="test-card">
+                <div class="test-header">
+                  <h4 class="text-body-medium">TC023 – Edit employee with leading/trailing spaces is handled and displayed consistently</h4>
+                </div>
+                <div class="test-content">
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Code</div>
+                    <div class="test-field-value text-body">
+                      <a href="./code_file" class="text-link">code_file</a>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Error</div>
+                    <div class="test-field-value text-body">N/A</div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Test Visualization and Result</div>
+                    <div class="test-field-value text-body">
+                      <a href="[View Recording](https://www.testsprite.com/dashboard/mcp/tests/e6bb1e49-4567-4deb-8023-4bbda3734f78/a7b8c9d0-e1f2-3456-abcd-567890123567)" class="text-link">View Results</a>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Status</div>
+                    <div class="test-field-value">
+                      <div class="status-wrapper">
+                <div class="status-icon">
+                    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="7.99961" cy="7.99998" r="6.4" fill="#10A363" fill-opacity="0.2"/>
+                        <path d="M5.59961 8.00002L7.19961 9.60002L10.3996 6.40002" stroke="#19C379" stroke-width="1.28" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <span class="text-body status-pass">Pass</span>
+            </div>
+                    </div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Severity</div>
+                    <div class="test-field-value text-body">LOW</div>
+                  </div>
+                  <div class="test-field">
+                    <div class="test-field-label text-body-medium">Analysis / Findings</div>
+                    <div class="test-field-value text-body">Leading/trailing whitespace in employee name fields is handled consistently by the application.</div>
                   </div>
                 </div>
               </div>

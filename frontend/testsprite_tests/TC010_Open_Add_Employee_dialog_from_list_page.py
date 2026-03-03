@@ -33,7 +33,7 @@ async def run_test():
         # -> Navigate to http://localhost:5173/login
         await page.goto("http://localhost:5173/login", wait_until="commit", timeout=10000)
         
-        # -> Type 'admin' into the username input (index 44) as the next immediate action.
+        # -> Type 'admin' into the username field (input index 7).
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/div/div/input').nth(0)
@@ -49,7 +49,13 @@ async def run_test():
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Click the '+ Add Employee' button to open the Add Employee dialog (index 1160).
+        # -> Click the Login button (index 4) again to attempt sign-in and trigger navigation to the Employee List (/list). After navigation, locate and click the '+ Add Employee' button and then verify the Add Employee dialog.
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div/header/div/div[2]/button').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Click the '+ Add Employee' button to open the Add Employee dialog and then verify the dialog and its header text.
         frame = context.pages[-1]
         # Click element
         elem = frame.locator('xpath=/html/body/div/div/div/div/div/div[2]/button').nth(0)
@@ -57,10 +63,13 @@ async def run_test():
         
         # --> Assertions to verify final state
         frame = context.pages[-1]
-        # Verify the text "Add Employee" in the opened dialog is visible (submit button inside dialog)
-        assert await frame.locator('xpath=/html/body/div[3]/div[3]/div/div/div/form/button').is_visible()
-        # Verify the Add Employee dialog is visible by checking a form input inside the dialog
-        assert await frame.locator('xpath=/html/body/div[3]/div[3]/div/div/div/form/div[1]/div/input').is_visible()
+        frame = context.pages[-1]
+        # Assert the 'Add Employee' text (button in the dialog) is visible
+        elem = frame.locator('xpath=/html/body/div[3]/div[3]/div/div/div/form/button').nth(0)
+        await page.wait_for_timeout(1000); assert await elem.is_visible()
+        # Assert the Add Employee dialog is visible by checking the Name input inside the dialog
+        elem = frame.locator('xpath=/html/body/div[3]/div[3]/div/div/div/form/div[1]/div/input').nth(0)
+        await page.wait_for_timeout(500); assert await elem.is_visible()
         await asyncio.sleep(5)
 
     finally:
