@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      API_KEY: ${{ secrets.TESTSPRITE_API_KEY }}
+      API_KEY: ${{ sk-user-G4Da2KVOTpwGXdiX9Komh5D_c9nx-7_f9VTX3WGMh6yzi3wG7qFEG3zezutxuzqqQv6zfnplmH5SELlYYO7bIuMCQqCsvVdB32oMBkJMPZaSwJs-g9DVHMpyQecB6S3AsUA }}
 
     steps:
       # ── 1. Checkout ──────────────────────────────────────────────────────────
@@ -72,25 +72,22 @@ jobs:
             sleep 2
           done
 
-      # ── 7. Run Testsprite tests ───────────────────────────────────────────────
-      - name: Install Testsprite CLI
-        run: npm install -g @testsprite/cli
-
-      - name: Run Testsprite frontend tests
+      # ── 7. Run Testsprite tests via MCP ───────────────────────────────────────
+      # Invokes the `testsprite_generate_code_and_execute` MCP tool through the
+      # package's built-in CLI command, using the existing test plan generated
+      # by the TestSprite MCP server.
+      - name: Run Testsprite frontend tests (MCP – generateCodeAndExecute)
         working-directory: frontend
         run: |
-          npx testsprite run \
-            --project-path . \
-            --test-plan testsprite_tests/testsprite_frontend_test_plan.json \
-            --server-mode production \
-            --endpoint http://localhost:5173/login \
-            --backend-url http://localhost:4000 \
-            --login-user admin \
-            --login-password password
+          npx -y @testsprite/testsprite-mcp@latest generateCodeAndExecute \
+            --projectName "frontend" \
+            --projectPath "$(pwd)" \
+            --serverMode production \
+            --additionalInstruction "The app requires login before accessing protected pages. Use username 'admin' and password 'password' for login. The backend API runs on http://localhost:4000. The frontend runs on http://localhost:5173. After login, the user is redirected to /list which shows the employee list."
         env:
-          API_KEY: ${{ secrets.TESTSPRITE_API_KEY }}
+          API_KEY: ${{ secrets.COPILOT_MCP_TESTSPRITE_API_KEY }}
 
-      # ── 8. Upload test report (always, for visibility on failures) ────────────
+      # ── 8. Upload Testsprite report (always, for visibility on failures) ──────
       - name: Upload Testsprite test report
         if: always()
         uses: actions/upload-artifact@v4
