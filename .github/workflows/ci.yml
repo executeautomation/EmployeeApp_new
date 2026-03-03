@@ -1,0 +1,100 @@
+name: CI – Build & Testsprite Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    env:
+      API_KEY: ${{ secrets.TESTSPRITE_API_KEY }}
+
+    steps:
+      # ── 1. Checkout ──────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── 2. Node.js setup ─────────────────────────────────────────────────────
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+
+      # ── 3. Install dependencies ───────────────────────────────────────────────
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm install
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install
+
+      # ── 4. Build frontend ─────────────────────────────────────────────────────
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
+
+      # ── 5. Start servers ──────────────────────────────────────────────────────
+      - name: Start backend server (port 4000)
+        working-directory: backend
+        run: node server.js &
+        env:
+          NODE_ENV: production
+
+      - name: Start frontend preview server (port 5173)
+        working-directory: frontend
+        run: npx vite preview --port 5173 --host &
+
+      # ── 6. Wait for both servers to be ready ──────────────────────────────────
+      - name: Wait for backend (port 4000)
+        run: |
+          echo "Waiting for backend on port 4000..."
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:4000 > /dev/null 2>&1 && echo "Backend is up" && break
+            echo "  attempt $i/30 – retrying in 2s"
+            sleep 2
+          done
+
+      - name: Wait for frontend preview (port 5173)
+        run: |
+          echo "Waiting for frontend on port 5173..."
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:5173 > /dev/null 2>&1 && echo "Frontend is up" && break
+            echo "  attempt $i/30 – retrying in 2s"
+            sleep 2
+          done
+
+      # ── 7. Run Testsprite tests ───────────────────────────────────────────────
+      - name: Install Testsprite CLI
+        run: npm install -g @testsprite/cli
+
+      - name: Run Testsprite frontend tests
+        working-directory: frontend
+        run: |
+          npx testsprite run \
+            --project-path . \
+            --test-plan testsprite_tests/testsprite_frontend_test_plan.json \
+            --server-mode production \
+            --endpoint http://localhost:5173/login \
+            --backend-url http://localhost:4000 \
+            --login-user admin \
+            --login-password password
+        env:
+          API_KEY: ${{ secrets.TESTSPRITE_API_KEY }}
+
+      # ── 8. Upload test report (always, for visibility on failures) ────────────
+      - name: Upload Testsprite test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: testsprite-report
+          path: frontend/testsprite_tests/
+          retention-days: 7
