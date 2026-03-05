@@ -6,7 +6,8 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
-  pull-requests: read
+  pull-requests: write
+  models: read
 tools:
   github:
     toolsets: [pull_requests]
