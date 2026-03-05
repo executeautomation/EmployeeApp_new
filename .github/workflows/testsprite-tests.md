@@ -81,15 +81,35 @@ Login credentials for the app: username `admin`, password `password`.
 
 ## Your Task
 
-1. Use the `testsprite_generate_code_and_execute` tool from the TestSprite MCP server to execute the existing test plan at `frontend/testsprite_tests/testsprite_frontend_test_plan.json`. Pass the following parameters:
+1. **Bootstrap the TestSprite configuration** by calling `testsprite_bootstrap` twice — once for the frontend and once for the backend — using the values below. Do **not** prompt the user; pass all parameters directly.
+
+   **Frontend bootstrap:**
+   - `type`: `"frontend"`
+   - `projectPath`: the absolute path to the `frontend/` directory in this workspace
+   - `localPort`: `5173`
+   - `pathname`: `"/"`
+   - `testScope`: `"codebase"`
+
+   **Backend bootstrap:**
+   - `type`: `"backend"`
+   - `projectPath`: the absolute path to the `backend/` directory in this workspace
+   - `localPort`: `4000`
+   - `pathname`: `"/"`
+   - `testScope`: `"codebase"`
+
+   The Product Specification document to upload when bootstrap asks for a PRD is located at:
+   `ProductSpect/ProductSpec.md` (relative to the workspace root).
+   Use its contents to answer any PRD-related prompts during bootstrap.
+
+2. Use the `testsprite_generate_code_and_execute` tool from the TestSprite MCP server to execute the existing test plan at `frontend/testsprite_tests/testsprite_frontend_test_plan.json`. Pass the following parameters:
    - `projectName`: `"frontend"`
    - `projectPath`: the absolute path to the `frontend/` directory in this workspace
    - `serverMode`: `"production"`
    - `additionalInstruction`: `"The app requires login before accessing protected pages. Use username 'admin' and password 'password' for login. The backend API runs on http://localhost:4000. The frontend runs on http://localhost:5173. After login, the user is redirected to /list which shows the employee list."`
 
-2. Wait for the test run to complete and collect the results.
+3. Wait for the test run to complete and collect the results.
 
-3. Summarize the results using the `add-comment` safe output on the current pull request. Format the comment as:
+4. Summarize the results using the `add-comment` safe output on the current pull request. Format the comment as:
 
 ```
 ## TestSprite Test Results
