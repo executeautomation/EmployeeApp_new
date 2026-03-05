@@ -1,0 +1,147 @@
+version: "2"
+type: frontend
+tech_stack:
+  - javascript
+  - react
+  - material-ui
+  - vite
+  - react-router
+  - axios
+routes:
+  - path: /login
+    file: src/components/Login.jsx
+    auth_required: false
+    description: User login page with username and password fields
+  - path: /list
+    file: src/components/EmployeeList.jsx
+    auth_required: true
+    description: Employee list page with table, search, and CRUD actions
+  - path: /form
+    file: src/components/EmployeeForm.jsx
+    auth_required: true
+    description: Standalone add employee form page
+  - path: /
+    file: src/App.jsx
+    auth_required: true
+    description: Redirects to /list when authenticated
+features:
+  - name: User Login
+    description: Login with username and password credentials to access the application
+    files:
+      - src/components/Login.jsx
+      - src/App.jsx
+    entry_route: /login
+    user_interactions:
+      - Fill username input field
+      - Fill password input field
+      - Click Login button to submit
+      - See error message on invalid credentials
+      - Redirected to /list on successful login
+    api_calls:
+      - method: POST
+        endpoint: /login
+    auth_required: false
+  - name: Employee List
+    description: View all employees in a table with search and filtering
+    files:
+      - src/components/EmployeeList.jsx
+    entry_route: /list
+    user_interactions:
+      - View employees listed in a table with ID, Name, Email, Position columns
+      - Type in the search field to filter employees by name, email, or position
+      - See "No employees found." when no results match
+      - See loading message while data is being fetched
+    api_calls:
+      - method: GET
+        endpoint: /employees
+    auth_required: true
+  - name: Add Employee
+    description: Add a new employee using a form dialog from the employee list page
+    files:
+      - src/components/EmployeeForm.jsx
+      - src/components/EmployeeList.jsx
+    entry_route: /list
+    user_interactions:
+      - Click "+ Add Employee" button to open the add dialog
+      - Fill Name input field
+      - Fill Email input field
+      - Fill Position input field
+      - Click "Add Employee" button to submit the form
+      - See success alert on successful addition
+      - See error alert on failure
+      - Dialog closes and list refreshes after successful add
+    api_calls:
+      - method: POST
+        endpoint: /employees
+    auth_required: true
+  - name: View Employee
+    description: View details of a specific employee in a dialog
+    files:
+      - src/components/EmployeeList.jsx
+    entry_route: /list
+    user_interactions:
+      - Click "View" button on an employee row
+      - See employee details (ID, Name, Email, Position) in a dialog
+      - Click "Close" button to dismiss the dialog
+    api_calls: []
+    auth_required: true
+  - name: Edit Employee
+    description: Edit an existing employee's information
+    files:
+      - src/components/EmployeeForm.jsx
+      - src/components/EmployeeList.jsx
+    entry_route: /list
+    user_interactions:
+      - Click "Edit" button on an employee row
+      - See form pre-filled with employee data in a dialog
+      - Modify Name, Email, or Position fields
+      - Click "Update Employee" button to submit changes
+      - See success alert on successful update
+      - Dialog closes and list refreshes after successful edit
+      - Click "Cancel" to close without saving
+    api_calls:
+      - method: PUT
+        endpoint: /employees/:id
+    auth_required: true
+  - name: Delete Employee
+    description: Delete an employee with confirmation dialog
+    files:
+      - src/components/EmployeeList.jsx
+    entry_route: /list
+    user_interactions:
+      - Click "Delete" button on an employee row
+      - See confirmation dialog asking "Are you sure you want to delete employee <name>?"
+      - Click "Delete" button to confirm deletion
+      - Click "Cancel" to cancel deletion
+      - See success notification after successful deletion
+      - List refreshes after deletion
+    api_calls:
+      - method: DELETE
+        endpoint: /employees/:id
+    auth_required: true
+  - name: Navigation Menu
+    description: Top navigation bar with links and theme toggle
+    files:
+      - src/components/MenuBar.jsx
+    entry_route: /login
+    user_interactions:
+      - See "Employee Manager" title in the app bar
+      - Click "Add Employee" link to navigate to /form
+      - Click "Employee List" link to navigate to /list
+      - Click "Logoff" button to log out and redirect to /login
+      - Click theme toggle icon to switch between light and dark mode
+      - See only "Login" link when not authenticated
+    api_calls: []
+    auth_required: false
+  - name: Theme Toggle
+    description: Switch between light and dark mode
+    files:
+      - src/App.jsx
+      - src/components/MenuBar.jsx
+    entry_route: /login
+    user_interactions:
+      - Click the sun/moon icon button in the menu bar
+      - See the UI switch between light and dark themes
+    api_calls: []
+    auth_required: false
+known_limitations: []
