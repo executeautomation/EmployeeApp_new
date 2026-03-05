@@ -15,16 +15,8 @@ mcp-servers:
     command: "npx"
     args: ["-y", "@testsprite/testsprite-mcp@latest"]
     env:
-      API_KEY: ${{ sk-user-G4Da2KVOTpwGXdiX9Komh5D_c9nx-7_f9VTX3WGMh6yzi3wG7qFEG3zezutxuzqqQv6zfnplmH5SELlYYO7bIuMCQqCsvVdB32oMBkJMPZaSwJs-g9DVHMpyQecB6S3AsUA }}
-    allowed:
-      - testsprite_bootstrap
-      - testsprite_generate_code_summary
-      - testsprite_generate_standardized_prd
-      - testsprite_generate_frontend_test_plan
-      - testsprite_generate_backend_test_plan
-      - testsprite_generate_code_and_execute
-      - testsprite_rerun_tests
-      - testsprite_open_test_result_dashboard
+      API_KEY: ${{ secrets.COPILOT_MCP_TESTSPRITE_API_KEY }}
+    allowed: ["*"]
 network:
   allowed:
     - defaults

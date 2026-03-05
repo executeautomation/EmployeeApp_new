@@ -23,7 +23,7 @@
 #
 # Run TestSprite frontend tests on every pull request using the TestSprite MCP server and report results as a PR comment.
 #
-# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"ad7fd7c90d6b0df24a209487ce02ab0fbe934d866a463063959898741406a9bf","compiler_version":"v0.51.6"}
+# gh-aw-metadata: {"schema_version":"v1","frontmatter_hash":"edc6337e04e2114ff0fdcc44dace88619b09155720447d652eeaa8b6804ae3c8","compiler_version":"v0.51.6"}
 
 name: "TestSprite Frontend Test Runner"
 "on":
@@ -615,14 +615,7 @@ jobs:
                   "@testsprite/testsprite-mcp@latest"
                 ],
                 "tools": [
-                  "testsprite_bootstrap",
-                  "testsprite_generate_code_summary",
-                  "testsprite_generate_standardized_prd",
-                  "testsprite_generate_frontend_test_plan",
-                  "testsprite_generate_backend_test_plan",
-                  "testsprite_generate_code_and_execute",
-                  "testsprite_rerun_tests",
-                  "testsprite_open_test_result_dashboard"
+                  "*"
                 ],
                 "env": {
                   "API_KEY": "\${COPILOT_MCP_TESTSPRITE_API_KEY}"
