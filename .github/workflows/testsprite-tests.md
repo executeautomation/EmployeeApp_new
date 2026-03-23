@@ -72,6 +72,8 @@ steps:
         curl -sf http://localhost:5173 > /dev/null 2>&1 && echo "Frontend ready" && break
         sleep 2
       done
+
+timeout-minutes: 60
 safe-outputs:
   add-comment:
     max: 1
