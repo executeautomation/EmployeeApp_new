@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# TestSprite runtime cache (contains ephemeral keys/config)
+testsprite_tests/tmp/

@@ -24,7 +24,6 @@ mcp-servers:
       - testsprite_generate_backend_test_plan
       - testsprite_generate_code_and_execute
       - testsprite_rerun_tests
-      - testsprite_open_test_result_dashboard
 network:
   allowed:
     - defaults
@@ -127,6 +126,7 @@ List each passed test with its title.
 - If the test run completes with **all tests passing**, leave a comment confirming success.
 - If **any tests fail**, leave a comment with the failure details so the author can address them before merging.
 - If `testsprite_generate_code_and_execute` is not available or returns an error, call `noop` with an explanation.
+- Do **not** call `testsprite_open_test_result_dashboard` — this is a headless CI environment with no display server.
 - Do **not** modify any source files.
 
 ## Safe Outputs
