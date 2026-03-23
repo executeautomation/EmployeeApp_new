@@ -15,7 +15,7 @@ mcp-servers:
     command: "npx"
     args: ["-y", "@testsprite/testsprite-mcp@latest"]
     env:
-      API_KEY: ${{ sk-user-G4Da2KVOTpwGXdiX9Komh5D_c9nx-7_f9VTX3WGMh6yzi3wG7qFEG3zezutxuzqqQv6zfnplmH5SELlYYO7bIuMCQqCsvVdB32oMBkJMPZaSwJs-g9DVHMpyQecB6S3AsUA }}
+      API_KEY: ${{ secrets.COPILOT_MCP_TESTSPRITE_API_KEY }}
     allowed:
       - testsprite_bootstrap
       - testsprite_generate_code_summary
