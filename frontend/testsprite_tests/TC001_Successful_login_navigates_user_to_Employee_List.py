@@ -6,6 +6,7 @@ async def run_test():
     pw = None
     browser = None
     context = None
+    
 
     try:
         # Start a Playwright session in asynchronous mode
