@@ -14,24 +14,19 @@ mcp-servers:
   TestSprite:
     command: "npx"
     args: ["-y", "@testsprite/testsprite-mcp@latest"]
+    allowed: ["*"]
     env:
-      API_KEY: ${{ sk-user-G4Da2KVOTpwGXdiX9Komh5D_c9nx-7_f9VTX3WGMh6yzi3wG7qFEG3zezutxuzqqQv6zfnplmH5SELlYYO7bIuMCQqCsvVdB32oMBkJMPZaSwJs-g9DVHMpyQecB6S3AsUA }}
-    allowed:
-      - testsprite_bootstrap
-      - testsprite_generate_code_summary
-      - testsprite_generate_standardized_prd
-      - testsprite_generate_frontend_test_plan
-      - testsprite_generate_backend_test_plan
-      - testsprite_generate_code_and_execute
-      - testsprite_rerun_tests
-      - testsprite_open_test_result_dashboard
+      API_KEY: ${{ secrets.COPILOT_MCP_TESTSPRITE_API_KEY }}
+    
 network:
   allowed:
     - defaults
     - node
+    - python
     - tun.testsprite.com
     - api.testsprite.com
     - testsprite.com
+    - playwright.azureedge.net
 steps:
   - name: Set up Node.js
     uses: actions/setup-node@v4
@@ -89,15 +84,21 @@ Login credentials for the app: username `admin`, password `password`.
 
 ## Your Task
 
-1. Use the `testsprite_generate_code_and_execute` tool from the TestSprite MCP server to execute the existing test plan at `frontend/testsprite_tests/testsprite_frontend_test_plan.json`. Pass the following parameters:
-   - `projectName`: `"frontend"`
-   - `projectPath`: the absolute path to the `frontend/` directory in this workspace
-   - `serverMode`: `"production"`
-   - `additionalInstruction`: `"The app requires login before accessing protected pages. Use username 'admin' and password 'password' for login. The backend API runs on http://localhost:4000. The frontend runs on http://localhost:5173. After login, the user is redirected to /list which shows the employee list."`
+Follow these steps **in order**. Each step depends on the previous one completing successfully.
 
-2. Wait for the test run to complete and collect the results.
+### Step 1 — Rerun existing tests
 
-3. Summarize the results using the `add-comment` safe output on the current pull request. Format the comment as:
+Use the `testsprite_rerun_tests` tool to re-execute the existing test cases located in `frontend/testsprite_tests/`. Pass the following parameters:
+- `projectName`: `"frontend"`
+- `projectPath`: the absolute path to the `frontend/` directory in this workspace
+- `serverMode`: `"production"`
+- `additionalInstruction`: `"The app requires login before accessing protected pages. Use username 'admin' and password 'password' for login. The backend API runs on http://localhost:4000. The frontend runs on http://localhost:5173. After login, the user is redirected to /list which shows the employee list."`
+
+Do **not** generate new tests or re-bootstrap the project. Only rerun the tests that already exist.
+
+### Step 2 — Report results
+
+Summarize the test results using the `add-comment` safe output on the current pull request. Format the comment as:
 
 ```
 ## TestSprite Test Results
@@ -124,9 +125,11 @@ List each passed test with its title.
 
 ## Guidelines
 
+- Follow the steps sequentially — do not skip steps or run them out of order.
 - If the test run completes with **all tests passing**, leave a comment confirming success.
 - If **any tests fail**, leave a comment with the failure details so the author can address them before merging.
-- If `testsprite_generate_code_and_execute` is not available or returns an error, call `noop` with an explanation.
+- If any tool is not available or returns an error, call `noop` with an explanation.
+- Do **not** call `testsprite_open_test_result_dashboard` — this is a headless CI environment with no display server.
 - Do **not** modify any source files.
 
 ## Safe Outputs
