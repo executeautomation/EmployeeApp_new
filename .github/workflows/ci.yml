@@ -33,11 +33,11 @@ jobs:
         working-directory: ./frontend
 
       - name: Start backend
-        run: npm start &
+        run: nohup npm start < /dev/null > backend.log 2>&1 &
         working-directory: ./backend
 
       - name: Start frontend
-        run: npm run dev -- --host 127.0.0.1 --port 5173 &
+        run: nohup npm run dev -- --host 127.0.0.1 --port 5173 < /dev/null > frontend.log 2>&1 &
         working-directory: ./frontend
 
       - name: Wait for frontend to be ready
