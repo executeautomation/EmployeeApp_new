@@ -34,25 +34,42 @@ jobs:
           timeout 60 bash -c 'until curl -s http://127.0.0.1:4000/employees > /dev/null 2>&1; do sleep 2; done'
           echo "Backend is up!"
 
-      - name: Debug - Show container status
-        if: always()
+      - name: Install and start Cloudflare Tunnel
         run: |
-          docker compose ps
-          echo "--- Frontend logs ---"
-          docker compose logs frontend --tail=30
-          echo "--- Backend logs ---"
-          docker compose logs backend --tail=30
+          # Install cloudflared
+          curl -sL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb -o cloudflared.deb
+          sudo dpkg -i cloudflared.deb
+
+          # Start tunnel for frontend and capture the public URL
+          cloudflared tunnel --url http://127.0.0.1:5173 --no-autoupdate > /tmp/cloudflared.log 2>&1 &
+          sleep 10
+
+          # Extract the tunnel URL from the logs
+          TUNNEL_URL=$(grep -o 'https://.*\.trycloudflare\.com' /tmp/cloudflared.log | head -1)
+          echo "Tunnel URL: $TUNNEL_URL"
+          echo "TUNNEL_URL=$TUNNEL_URL" >> $GITHUB_ENV
+
+      - name: Verify tunnel is working
+        run: |
+          echo "Testing tunnel URL: $TUNNEL_URL"
+          curl -sI "$TUNNEL_URL" | head -5
 
       - name: Run Testsprite Action
         uses: TestSprite/run-action@v1
         with:
           testsprite-api-key: ${{ secrets.TESTSPRITE_API_KEY }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          base_url: http://127.0.0.1:5173
+          base_url: ${{ env.TUNNEL_URL }}
           blocking: 'true'
 
       - name: Debug - Show logs on failure
         if: failure()
         run: |
+          echo "--- Docker status ---"
           docker compose ps
-          docker compose logs --tail=50
+          echo "--- Frontend logs ---"
+          docker compose logs frontend --tail=30
+          echo "--- Backend logs ---"
+          docker compose logs backend --tail=30
+          echo "--- Cloudflare tunnel logs ---"
+          cat /tmp/cloudflared.log || true
