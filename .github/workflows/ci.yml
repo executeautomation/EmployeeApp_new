@@ -24,24 +24,8 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install backend dependencies
-        run: npm install
-        working-directory: ./backend
-
-      - name: Install pm2
-        run: npm install -g pm2
-
-      - name: Install frontend dependencies
-        run: npm install
-        working-directory: ./frontend
-
-      - name: Start backend
-        run: pm2 start npm --name "backend" -- start
-        working-directory: ./backend
-
-      - name: Start frontend
-        run: pm2 start npm --name "frontend" -- run dev -- --host 127.0.0.1 --port 5173
-        working-directory: ./frontend
+      - name: Start Application via Docker Compose
+        run: docker-compose up -d --build
 
       - name: Wait for frontend to be ready
         run: npx wait-on http://127.0.0.1:5173
