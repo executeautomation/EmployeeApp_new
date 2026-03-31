@@ -33,7 +33,7 @@ async def run_test():
         # -> Navigate to http://127.0.0.1:5173
         await page.goto("http://127.0.0.1:5173", wait_until="commit", timeout=10000)
         
-        # -> Fill username and password into the login form and click the Login button (input into index 9 and 10, then click index 13).
+        # -> Enter the username into the Username field and the password into the Password field, then click the Login button.
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/div/div/input').nth(0)
@@ -49,61 +49,51 @@ async def run_test():
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Open the Add Employee dialog by clicking the '+ ADD EMPLOYEE' button so an employee can be created (then edit it).
+        # -> Click the Login button to attempt to log in and navigate to the employee list (/list), then wait for the page to load.
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div/header/div/div[2]/button').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Open the Add Employee dialog so an employee can be created for the edit test.
         frame = context.pages[-1]
         # Click element
         elem = frame.locator('xpath=/html/body/div/div/div/div/div/div[2]/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Fill the Add Employee form with initial values (Initial Name, initial.email@example.com, Initial Position) and submit to create an employee row in the list.
+        # -> Fill the Add Employee form (Name, Email, Position) and submit it to create an employee for the edit test.
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div/div/input').nth(0)
-        await page.wait_for_timeout(3000); await elem.fill('Initial Name')
+        await page.wait_for_timeout(3000); await elem.fill('John Doe')
         
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div[2]/div/input').nth(0)
-        await page.wait_for_timeout(3000); await elem.fill('initial.email@example.com')
+        await page.wait_for_timeout(3000); await elem.fill('john.doe@example.com')
         
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div[3]/div/input').nth(0)
-        await page.wait_for_timeout(3000); await elem.fill('Initial Position')
+        await page.wait_for_timeout(3000); await elem.fill('Engineer')
         
-        # -> Click the 'ADD EMPLOYEE' button to submit the Add Employee form and create the new employee (click element index 204).
+        # -> Click the 'Add Employee' submit button to create the employee, then wait for the list to update.
         frame = context.pages[-1]
         # Click element
         elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Open the Edit dialog for the newly created employee row (the row with Email 'initial.email@example.com').
+        # -> Click the Edit button for an employee row (the Edit button in the third row, index 354) to open the Update/Edit Employee dialog.
         frame = context.pages[-1]
         # Click element
-        elem = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr[7]/td[5]/button[2]').nth(0)
+        elem = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr[3]/td[5]/button[2]').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Fill 'Updated Name' into the Name input (index 467), 'updated.email@example.com' into the Email input (index 475), 'Updated Position' into the Position input (index 483), then click the 'Update Employee' button (index 490).
+        # -> Fill the Name input in the open Edit dialog with 'Temp Name Not Saved', then close the dialog with Escape and capture the page text to verify the dialog closed and the list was not modified.
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div/div/input').nth(0)
-        await page.wait_for_timeout(3000); await elem.fill('Updated Name')
-        
-        frame = context.pages[-1]
-        # Input text
-        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div[2]/div/input').nth(0)
-        await page.wait_for_timeout(3000); await elem.fill('updated.email@example.com')
-        
-        frame = context.pages[-1]
-        # Input text
-        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div[3]/div/input').nth(0)
-        await page.wait_for_timeout(3000); await elem.fill('Updated Position')
-        
-        # -> Click the 'Update Employee' button to submit the changes, wait for the list to refresh, and then extract the employee row to verify Name, Email, and Position reflect the updated values.
-        frame = context.pages[-1]
-        # Click element
-        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/button').nth(0)
-        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        await page.wait_for_timeout(3000); await elem.fill('Temp Name Not Saved')
         
         # --> Test passed — verified by AI agent
         frame = context.pages[-1]

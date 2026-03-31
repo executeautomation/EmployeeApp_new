@@ -30,10 +30,10 @@ async def run_test():
         page = await context.new_page()
 
         # Interact with the page elements to simulate user flow
-        # -> Navigate to http://localhost:5173/login
-        await page.goto("http://localhost:5173/login", wait_until="commit", timeout=10000)
+        # -> Navigate to http://127.0.0.1:5173
+        await page.goto("http://127.0.0.1:5173", wait_until="commit", timeout=10000)
         
-        # -> Type 'admin' into the username field (index 44), then type 'password' into the password field (index 52), then click the Login button (index 58).
+        # -> Fill the username and password fields and click the Login button.
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/div/div/input').nth(0)
@@ -49,13 +49,119 @@ async def run_test():
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Click the 'Delete' button for the first employee row to open the confirmation dialog (use element index 1600).
+        # -> Click the Login button to submit the credentials and wait for the app to navigate to the employee list page (then locate the first employee's Delete button).
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div/header/div/div[2]/button').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Open the Add Employee dialog/form by clicking the '+ Add Employee' button so a new employee can be created.
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div/div/div/div/div/div[2]/button').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Fill the Add Employee form (Name, Email, Position) and submit it to create a new employee so it can be deleted next.
+        frame = context.pages[-1]
+        # Input text
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div/div/input').nth(0)
+        await page.wait_for_timeout(3000); await elem.fill('John Doe')
+        
+        frame = context.pages[-1]
+        # Input text
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div[2]/div/input').nth(0)
+        await page.wait_for_timeout(3000); await elem.fill('john@example.com')
+        
+        frame = context.pages[-1]
+        # Input text
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div[3]/div/input').nth(0)
+        await page.wait_for_timeout(3000); await elem.fill('Developer')
+        
+        # -> Click the 'Add Employee' submit button to create the new employee (then proceed to delete it).
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/button').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Click the 'Delete' button for the first employee row to open the confirmation dialog, then confirm the deletion.
         frame = context.pages[-1]
         # Click element
         elem = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr/td[5]/button[3]').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Click the 'Delete' button in the confirmation dialog to confirm deletion (element index 1656). Then wait for the list to update and check that the 'Deleted' text/notification appears.
+        # -> Click the 'Delete' (confirm) button in the confirmation dialog to delete the employee and trigger the list update.
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div[2]/button[2]').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Click the 'Delete' button for the first employee row (Test User E, ID 9) to open the confirmation dialog.
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr/td[5]/button[3]').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Click the 'Delete' confirm button in the confirmation dialog to delete Test User E (index 658).
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div[2]/button[2]').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Open the delete confirmation dialog for the first visible employee (ID 10) by clicking its Delete button so the confirmation can be clicked next.
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr/td[5]/button[3]').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Click the 'Delete' confirm button in the confirmation dialog to delete employee ID 10 (John Doe), wait for the operation to complete, then extract the visible employee list rows and check whether 'ID 10' or 'John Doe' are still present.
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div[2]/button[2]').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Open the delete confirmation dialog for the first visible employee row (ID 11 / Valid User) by clicking its Delete button so the confirmation can be clicked next.
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr/td[5]/button').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Close the Employee Details modal so the Delete button for ID 11 can be clicked.
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div[2]/button').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Click the 'Delete' button for the first visible employee row (ID 11 / Valid User) to open the confirmation dialog.
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr/td[5]/button[3]').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Click the 'Delete' confirm button in the confirmation dialog (index 1075), wait for the operation to complete, then extract the visible employee list rows and verify that ID 11 / Valid User is no longer present.
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div[2]/button[2]').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Open the delete confirmation dialog for the first visible employee row (ID 12 / John Doe) by clicking its Delete button, so the confirmation can be clicked next.
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr/td[5]/button[3]').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Click the Delete confirm button in the dialog for ID 12 (index 1232), wait for the operation to complete, then extract the visible employee list rows and check whether ID 12 or 'John Doe' remain.
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div[2]/button[2]').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Click the 'Delete' button for the first visible employee row (ID 13 / Spaced Name) to open the confirmation dialog so it can be confirmed and the list re-checked.
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr/td[5]/button[3]').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Click the Delete confirm button to delete ID 13 (Spaced Name), wait for the operation to complete, then extract the visible employee list rows and check whether ID 13 or 'Spaced Name' remain.
         frame = context.pages[-1]
         # Click element
         elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div[2]/button[2]').nth(0)
@@ -63,13 +169,8 @@ async def run_test():
         
         # --> Assertions to verify final state
         frame = context.pages[-1]
-        frame = context.pages[-1]
-        # Sanity check: ensure we are on the employee list page after login
-        elem = frame.locator('xpath=/html/body/div/header/div/div[2]/a[2]').nth(0)
-        await page.wait_for_timeout(1000)
-        assert await elem.is_visible(), "Expected 'Employee List' link to be visible after login"
-        # The test plan requires verifying the 'Confirm' dialog and a 'Deleted' notification, but those elements/ xpaths are NOT present in the provided available elements list.
-        raise AssertionError("Cannot complete test: 'Confirm' dialog and 'Deleted' notification elements not found in available elements. Report the issue and mark the task as done.")
+        await expect(frame.locator('text=Confirm').first).to_be_visible(timeout=3000)
+        await expect(frame.locator('text=Deleted').first).to_be_visible(timeout=3000)
         await asyncio.sleep(5)
 
     finally:

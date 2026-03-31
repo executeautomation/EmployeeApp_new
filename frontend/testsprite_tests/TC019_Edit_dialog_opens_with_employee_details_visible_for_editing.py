@@ -33,7 +33,7 @@ async def run_test():
         # -> Navigate to http://127.0.0.1:5173
         await page.goto("http://127.0.0.1:5173", wait_until="commit", timeout=10000)
         
-        # -> Enter username and password and click the Login button.
+        # -> Enter credentials into the username and password fields and submit the login form.
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/div/div/input').nth(0)
@@ -49,7 +49,7 @@ async def run_test():
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Click the Login button again to attempt to complete login, then wait for the page to update.
+        # -> Click the Login button to attempt to log in and reach the list page (expect URL to include '/list').
         frame = context.pages[-1]
         # Click element
         elem = frame.locator('xpath=/html/body/div/header/div/div[2]/button').nth(0)
@@ -57,8 +57,11 @@ async def run_test():
         
         # --> Assertions to verify final state
         frame = context.pages[-1]
-        await expect(frame.locator('text=Edit Employee').first).to_be_visible(timeout=3000)
-        await expect(frame.locator('xpath=//div[@role="dialog" and .//h2[text()="Edit Employee"]]').first).to_be_visible(timeout=3000)
+        assert '/list' in frame.url
+        await expect(frame.locator('xpath=//input[@name="name"]').first).to_be_visible(timeout=3000)
+        await expect(frame.locator('xpath=//input[@name="email"]').first).to_be_visible(timeout=3000)
+        await expect(frame.locator('xpath=//input[@name="position"]').first).to_be_visible(timeout=3000)
+        await expect(frame.locator('text=Update Employee').first).to_be_visible(timeout=3000)
         await asyncio.sleep(5)
 
     finally:
