@@ -37,7 +37,7 @@ const EmployeeList = () => {
   const fetchEmployees = () => {
     setLoading(true);
     setError('');
-    axios.get('http://localhost:4000/employees')
+    axios.get('/api/employees')
       .then(res => {
         setEmployees(res.data);
         setLoading(false);
@@ -67,7 +67,7 @@ const EmployeeList = () => {
     setError('');
     
     try {
-      await axios.delete(`http://localhost:4000/employees/${deleteEmp.id}`);
+      await axios.delete(`/api/employees/${deleteEmp.id}`);
       setDeleteEmp(null);
       setSuccess('Employee deleted successfully!');
       fetchEmployees();

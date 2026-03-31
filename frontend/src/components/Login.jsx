@@ -18,7 +18,7 @@ const Login = () => {
     setError(''); // Clear any previous errors
     
     try {
-      const response = await axios.post('http://localhost:4000/login', { username, password });
+      const response = await axios.post('/api/login', { username, password });
       
       if (response.data.success) {
         localStorage.setItem('loggedIn', 'true');
