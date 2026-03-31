@@ -54,6 +54,15 @@ jobs:
           echo "Testing tunnel URL: $TUNNEL_URL"
           curl -sI "$TUNNEL_URL" | head -5
 
+      - name: Rewrite hardcoded URLs in test scripts
+        run: |
+          echo "Replacing http://127.0.0.1:5173 with $TUNNEL_URL in test files..."
+          find testsprite_tests -name '*.py' -exec sed -i "s|http://127.0.0.1:5173|$TUNNEL_URL|g" {} +
+          echo "Replacing http://localhost:5173 with $TUNNEL_URL in test files..."
+          find testsprite_tests -name '*.py' -exec sed -i "s|http://localhost:5173|$TUNNEL_URL|g" {} +
+          # Show a sample to verify
+          grep -r 'trycloudflare' testsprite_tests/*.py | head -3 || echo "No replacements found - check URL pattern"
+
       - name: Run Testsprite Action
         uses: TestSprite/run-action@v1
         with:
