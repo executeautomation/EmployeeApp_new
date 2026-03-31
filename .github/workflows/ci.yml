@@ -19,16 +19,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Start Application via Docker Compose
+      - name: Build and start app containers
         run: docker compose up -d --build
 
       - name: Wait for frontend to be ready
-        run: npx wait-on http://127.0.0.1:5173
+        run: |
+          echo "Waiting for frontend on port 5173..."
+          timeout 60 bash -c 'until curl -s http://127.0.0.1:5173 > /dev/null 2>&1; do sleep 2; done'
+          echo "Frontend is up!"
+
+      - name: Wait for backend to be ready
+        run: |
+          echo "Waiting for backend on port 4000..."
+          timeout 60 bash -c 'until curl -s http://127.0.0.1:4000/employees > /dev/null 2>&1; do sleep 2; done'
+          echo "Backend is up!"
+
+      - name: Debug - Show container status
+        if: always()
+        run: |
+          docker compose ps
+          echo "--- Frontend logs ---"
+          docker compose logs frontend --tail=30
+          echo "--- Backend logs ---"
+          docker compose logs backend --tail=30
 
       - name: Run Testsprite Action
         uses: TestSprite/run-action@v1
@@ -37,3 +50,9 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           base_url: http://127.0.0.1:5173
           blocking: 'true'
+
+      - name: Debug - Show logs on failure
+        if: failure()
+        run: |
+          docker compose ps
+          docker compose logs --tail=50
