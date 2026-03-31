@@ -37,16 +37,16 @@ jobs:
         working-directory: ./backend
 
       - name: Start frontend
-        run: npm run dev -- --host 0.0.0.0 --port 5173 &
+        run: npm run dev -- --host 127.0.0.1 --port 5173 &
         working-directory: ./frontend
 
       - name: Wait for frontend to be ready
-        run: npx wait-on http://localhost:5173
+        run: npx wait-on http://127.0.0.1:5173
 
       - name: Run Testsprite Action
         uses: TestSprite/run-action@v1
         with:
           testsprite-api-key: ${{ secrets.TESTSPRITE_API_KEY }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          base_url: http://localhost:5173
+          base_url: http://127.0.0.1:5173
           blocking: 'true'
