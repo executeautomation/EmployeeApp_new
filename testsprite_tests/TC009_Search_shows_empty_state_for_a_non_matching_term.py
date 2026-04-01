@@ -49,11 +49,6 @@ async def run_test():
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Click the Login button again to attempt login and trigger navigation to the app's main page (element index 3).
-        frame = context.pages[-1]
-        # Click element
-        elem = frame.locator('xpath=/html/body/div/header/div/div[2]/button').nth(0)
-        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
         # -> Type a non-matching term into the search input to confirm the UI shows an empty table or a no-results message (input field index 129).
         frame = context.pages[-1]

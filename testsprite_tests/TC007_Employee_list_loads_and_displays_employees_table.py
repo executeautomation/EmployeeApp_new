@@ -49,11 +49,6 @@ async def run_test():
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Attempt to click the Login button again to trigger authentication and navigate to the /list page (click element index 3).
-        frame = context.pages[-1]
-        # Click element
-        elem = frame.locator('xpath=/html/body/div/header/div/div[2]/button').nth(0)
-        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
         # --> Test passed — verified by AI agent
         frame = context.pages[-1]
