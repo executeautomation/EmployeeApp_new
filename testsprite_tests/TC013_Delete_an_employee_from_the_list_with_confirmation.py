@@ -49,11 +49,6 @@ async def run_test():
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Click the Login button to submit the credentials and wait for the app to navigate to the employee list page (then locate the first employee's Delete button).
-        frame = context.pages[-1]
-        # Click element
-        elem = frame.locator('xpath=/html/body/div/header/div/div[2]/button').nth(0)
-        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
         # -> Open the Add Employee dialog/form by clicking the '+ Add Employee' button so a new employee can be created.
         frame = context.pages[-1]

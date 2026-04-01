@@ -33,7 +33,10 @@ async def run_test():
         # -> Navigate to http://127.0.0.1:5173
         await page.goto("http://127.0.0.1:5173", wait_until="commit", timeout=10000)
         
-        # -> Fill the username field with the admin username (index 11). Then fill password (index 12) and click the Login button (index 15).
+        # -> Navigate to http://127.0.0.1:5173/login and wait for the login page to render so the login form can be interacted with.
+        await page.goto("http://127.0.0.1:5173/login", wait_until="commit", timeout=10000)
+        
+        # -> Enter username and password, then click the Login button to sign in.
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/div/div/input').nth(0)
@@ -49,34 +52,35 @@ async def run_test():
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
+        # -> Navigate to the login page so the login form can be interacted with (attempt to recover from blank SPA)
+        await page.goto("http://127.0.0.1:5173/login", wait_until="commit", timeout=10000)
         
-        # -> Open the Add Employee form by clicking the + Add Employee button on the Employee List page.
+        # -> Fill the username and password fields with admin/password and click the Login button to reach the employees list.
+        frame = context.pages[-1]
+        # Input text
+        elem = frame.locator('xpath=/html/body/div/div/div/div/form/div/div/input').nth(0)
+        await page.wait_for_timeout(3000); await elem.fill('admin')
+        
+        frame = context.pages[-1]
+        # Input text
+        elem = frame.locator('xpath=/html/body/div/div/div/div/form/div[2]/div/input').nth(0)
+        await page.wait_for_timeout(3000); await elem.fill('password')
+        
         frame = context.pages[-1]
         # Click element
-        elem = frame.locator('xpath=/html/body/div/div/div/div/div/div[2]/button').nth(0)
+        elem = frame.locator('xpath=/html/body/div/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Fill the Name, Email, and Position fields in the Add Employee form and click the Add Employee submit button.
-        frame = context.pages[-1]
-        # Input text
-        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div/div/input').nth(0)
-        await page.wait_for_timeout(3000); await elem.fill('Test User A')
-        
-        frame = context.pages[-1]
-        # Input text
-        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div[2]/div/input').nth(0)
-        await page.wait_for_timeout(3000); await elem.fill('test.user.a@example.com')
-        
-        frame = context.pages[-1]
-        # Input text
-        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div[3]/div/input').nth(0)
-        await page.wait_for_timeout(3000); await elem.fill('QA Engineer')
-        
-        # -> Click the Add Employee submit button (index 218) to submit the form, then verify the new employee 'Test User A' appears in the employee list.
+        # -> Click the search input (index 2513) and type 'a' to apply the filter, then verify the employees table is visible and that 'No results' is not shown.
         frame = context.pages[-1]
         # Click element
-        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/button').nth(0)
+        elem = frame.locator('xpath=/html/body/div/div/div/div/div/div[3]/div/div/input').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        frame = context.pages[-1]
+        # Input text
+        elem = frame.locator('xpath=/html/body/div/div/div/div/div/div[3]/div/div/input').nth(0)
+        await page.wait_for_timeout(3000); await elem.fill('a')
         
         # --> Test passed — verified by AI agent
         frame = context.pages[-1]

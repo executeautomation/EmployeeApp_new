@@ -33,7 +33,7 @@ async def run_test():
         # -> Navigate to http://127.0.0.1:5173
         await page.goto("http://127.0.0.1:5173", wait_until="commit", timeout=10000)
         
-        # -> Fill the username field with the admin username (index 11). Then fill password (index 12) and click the Login button (index 15).
+        # -> Enter the username into the Username field and the password into the Password field, then click the Login button.
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/div/div/input').nth(0)
@@ -49,39 +49,40 @@ async def run_test():
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        
-        # -> Open the Add Employee form by clicking the + Add Employee button on the Employee List page.
+        # -> Click the Login button to submit credentials, then wait for the app to navigate to the employee list (verify URL contains '/list').
         frame = context.pages[-1]
         # Click element
-        elem = frame.locator('xpath=/html/body/div/div/div/div/div/div[2]/button').nth(0)
+        elem = frame.locator('xpath=/html/body/div/header/div/div[2]/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Fill the Name, Email, and Position fields in the Add Employee form and click the Add Employee submit button.
+        # -> Click the 'Edit' button for the first employee row to open the Update Employee dialog, then clear the Name field and attempt to submit.
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr/td[5]/button[2]').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Click the 'Edit' button for the first employee row to open the Update Employee dialog.
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div/div/div/div/div[2]/table/tbody/tr/td[5]/button[2]').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Clear the Name input (index 2344), click the Update Employee button (index 2367) to trigger validation, and verify that the text 'required' is visible on the page.
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div/div/input').nth(0)
-        await page.wait_for_timeout(3000); await elem.fill('Test User A')
+        await page.wait_for_timeout(3000); await elem.fill('')
         
-        frame = context.pages[-1]
-        # Input text
-        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div[2]/div/input').nth(0)
-        await page.wait_for_timeout(3000); await elem.fill('test.user.a@example.com')
-        
-        frame = context.pages[-1]
-        # Input text
-        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div[3]/div/input').nth(0)
-        await page.wait_for_timeout(3000); await elem.fill('QA Engineer')
-        
-        # -> Click the Add Employee submit button (index 218) to submit the form, then verify the new employee 'Test User A' appears in the employee list.
         frame = context.pages[-1]
         # Click element
         elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # --> Test passed — verified by AI agent
+        # --> Assertions to verify final state
         frame = context.pages[-1]
-        current_url = await frame.evaluate("() => window.location.href")
-        assert current_url is not None, "Test completed successfully"
+        assert '/list' in frame.url
+        await expect(frame.locator('text=Update Employee').first).to_be_visible(timeout=3000)
+        await expect(frame.locator('text=required').first).to_be_visible(timeout=3000)
         await asyncio.sleep(5)
 
     finally:

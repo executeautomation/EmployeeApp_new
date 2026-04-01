@@ -49,11 +49,6 @@ async def run_test():
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Attempt login again by clicking the Login button to reach the employees page so the search input can be tested.
-        frame = context.pages[-1]
-        # Click element
-        elem = frame.locator('xpath=/html/body/div/header/div/div[2]/button').nth(0)
-        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
         # -> Type 'a' into the Search employees input to trigger filtering and then check whether the employees table shows results and the 'No results'/'No employees found.' message disappears.
         frame = context.pages[-1]

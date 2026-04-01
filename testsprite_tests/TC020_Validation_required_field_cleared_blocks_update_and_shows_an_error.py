@@ -49,11 +49,6 @@ async def run_test():
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
-        # -> Attempt to log in again by clicking the Login button, then wait for navigation to the employee list (/list).
-        frame = context.pages[-1]
-        # Click element
-        elem = frame.locator('xpath=/html/body/div/header/div/div[2]/button').nth(0)
-        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
         # -> Open the Add Employee dialog by clicking the '+ ADD EMPLOYEE' button so an employee can be created.
         frame = context.pages[-1]
