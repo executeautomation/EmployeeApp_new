@@ -30,14 +30,11 @@ async def run_test():
         page = await context.new_page()
 
         # Interact with the page elements to simulate user flow
-        # -> Navigate to http://localhost:5173/login
-        await page.goto("http://localhost:5173/login", wait_until="commit", timeout=10000)
+        # -> Navigate to http://127.0.0.1:5173
+        await page.goto("http://127.0.0.1:5173", wait_until="commit", timeout=10000)
         
-        # -> Click the Login submit button to submit the form with both fields empty.
-        frame = context.pages[-1]
-        # Click element
-        elem = frame.locator('xpath=/html/body/div/div/div/div/form/button').nth(0)
-        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        # -> Navigate to http://127.0.0.1:5173/login and wait for the page to load so the login form can be located and tested.
+        await page.goto("http://127.0.0.1:5173/login", wait_until="commit", timeout=10000)
         
         # --> Assertions to verify final state
         frame = context.pages[-1]

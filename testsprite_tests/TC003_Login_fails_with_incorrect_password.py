@@ -33,14 +33,16 @@ async def run_test():
         # -> Navigate to http://127.0.0.1:5173
         await page.goto("http://127.0.0.1:5173", wait_until="commit", timeout=10000)
         
-        # -> Navigate to /login and check for the Login form and interactive elements (username, password, Login button). If still blank, wait briefly and re-check; if feature truly missing, report issue and finish.
-        await page.goto("http://127.0.0.1:5173/login", wait_until="commit", timeout=10000)
+        # -> Fill the username and password with wrong credentials, submit the form, wait briefly, then extract page text to check for an invalid-credentials error message and ensure the URL still contains '/login'.
+        frame = context.pages[-1]
+        # Input text
+        elem = frame.locator('xpath=/html/body/div/div/div/div/form/div/div/input').nth(0)
+        await page.wait_for_timeout(3000); await elem.fill('fake.user@example.com')
         
-        # -> Enter password 'password' into the Password field (index 203) while leaving Username empty, then click the Login button (index 206) to submit the form.
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/div[2]/div/input').nth(0)
-        await page.wait_for_timeout(3000); await elem.fill('password')
+        await page.wait_for_timeout(3000); await elem.fill('wrong-password-123')
         
         frame = context.pages[-1]
         # Click element

@@ -33,10 +33,12 @@ async def run_test():
         # -> Navigate to http://127.0.0.1:5173
         await page.goto("http://127.0.0.1:5173", wait_until="commit", timeout=10000)
         
-        # -> Navigate to /login and check for the Login form and interactive elements (username, password, Login button). If still blank, wait briefly and re-check; if feature truly missing, report issue and finish.
-        await page.goto("http://127.0.0.1:5173/login", wait_until="commit", timeout=10000)
+        # -> Enter username and password, then click the Login button to submit the form.
+        frame = context.pages[-1]
+        # Input text
+        elem = frame.locator('xpath=/html/body/div/div/div/div/form/div/div/input').nth(0)
+        await page.wait_for_timeout(3000); await elem.fill('admin')
         
-        # -> Enter password 'password' into the Password field (index 203) while leaving Username empty, then click the Login button (index 206) to submit the form.
         frame = context.pages[-1]
         # Input text
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/div[2]/div/input').nth(0)
@@ -45,6 +47,35 @@ async def run_test():
         frame = context.pages[-1]
         # Click element
         elem = frame.locator('xpath=/html/body/div/div/div/div/form/button').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        
+        # -> Click the '+ ADD EMPLOYEE' button to open the Add Employee form page (/form).
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div/div/div/div/div/div[2]/button').nth(0)
+        await page.wait_for_timeout(3000); await elem.click(timeout=5000)
+        
+        # -> Fill the Add Employee form with Name='Test User E', Email='test.user+alias@example.com', Position='HR' and submit the form, then wait for the list to update.
+        frame = context.pages[-1]
+        # Input text
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div/div/input').nth(0)
+        await page.wait_for_timeout(3000); await elem.fill('Test User E')
+        
+        frame = context.pages[-1]
+        # Input text
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div[2]/div/input').nth(0)
+        await page.wait_for_timeout(3000); await elem.fill('test.user+alias@example.com')
+        
+        frame = context.pages[-1]
+        # Input text
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/div[3]/div/input').nth(0)
+        await page.wait_for_timeout(3000); await elem.fill('HR')
+        
+        # -> Click the Add Employee submit button to submit the form and wait for the employee list to update (verify the new entry appears).
+        frame = context.pages[-1]
+        # Click element
+        elem = frame.locator('xpath=/html/body/div[2]/div[3]/div/div/div/form/button').nth(0)
         await page.wait_for_timeout(3000); await elem.click(timeout=5000)
         
         # --> Test passed — verified by AI agent
